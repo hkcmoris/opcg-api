@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 const errorHandler = require('./errorHandler');
 const setsRoutes = require('./routes/sets');
+const cardsRoutes = require('./routes/cards');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +22,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use('/api/v1/sets', setsRoutes);
+app.use('/api/v1/cards', cardsRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

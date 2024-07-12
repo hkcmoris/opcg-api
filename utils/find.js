@@ -30,4 +30,14 @@ const findCard = (cardId) => {
     return cardsMap[cardId.toUpperCase()];
 }
 
-module.exports = { findSet, findCard };
+const findCards = (cardCode) => {
+    const cardDetails = [];
+    Object.values(cardsMap).forEach(card => {
+        if (card.code && card.code.toUpperCase().includes(cardCode)) {
+            cardDetails.push(card);
+        }
+    });
+    return cardDetails;
+}
+
+module.exports = { findSet, findCard, findCards, cardsMap, setsMap };
