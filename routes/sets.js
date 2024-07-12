@@ -4,9 +4,6 @@ const router = express.Router();
 const { body, param, validationResult } = require('express-validator');
 const { findSet, findCard } = require('../utils/find');
 
-const collectionData = require('../collection.json');
-
-
 router.get('/', (req, res) => { 
     res.json(collectionData); 
 });
