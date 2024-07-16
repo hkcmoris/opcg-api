@@ -2,10 +2,10 @@
 const express = require('express');
 const router = express.Router();
 const { body, param, validationResult } = require('express-validator');
-const { findSet, findCard } = require('../utils/find');
+const { findSet, findCard, setsMap } = require('../utils/find');
 
 router.get('/', (req, res) => { 
-    res.json(collectionData); 
+    res.json(setsMap); 
 });
 
 router.get('/:setId', [param('setId').isString().notEmpty()], (req, res) => { 
