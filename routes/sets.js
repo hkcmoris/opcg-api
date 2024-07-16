@@ -1,57 +1,56 @@
 // routes/sets.js
 const express = require('express');
 const router = express.Router();
-const { body, param, validationResult } = require('express-validator');
-const { findSet, findCard, setsMap } = require('../utils/find');
+const { param, validationResult } = require('express-validator');
+const { findSet, findCard, setsMap, cardsMap } = require('../utils/find');
 
 router.get('/', (req, res) => { 
     res.json(setsMap); 
 });
 
-router.get('/:setId', [param('setId').isString().notEmpty()], (req, res) => { 
+router.get('/:setCode', [param('setCode').isString().notEmpty()], (req, res) => { 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
     
-    const setDetails = findSet(req.params.setId);
+    const setDetails = findSet(req.params.setCode);
 
     if (setDetails) {
-        const { cards, ...detailsWithoutCards } = setDetails;
-        res.json(detailsWithoutCards);
+        res.json(setDetails);
     } else {
-        res.status(404).json({ error: 'Set not found' });
+        res.status(404).json({ error: 'Set ' + req.params.setCode + ' not found' });
     } 
 });
 
-router.get('/:setId/cards', [param('setId').isString().notEmpty()], (req, res) => {
+router.get('/:setCode/cards', [param('setCode').isString().notEmpty()], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const setDetails = findSet(req.params.setId);
+    const setDetails = findSet(req.params.setCode);
 
     if (setDetails) {
-        res.json(setDetails);
+        res.json(setDetails.cards.map(cardId => cardsMap[cardId]));
     } else {
-        res.status(404).json({ error: 'Set not found' });
+        res.status(404).json({ error: 'Set ' + req.params.setCode + ' not found' });
     }
 });
 
-router.get('/:setId/:cardId', [
-    param('setId').isString().notEmpty(),
-    param('cardId').isString().notEmpty()
+router.get('/:setCode/:cardCode', [
+    param('setCode').isString().notEmpty(),
+    param('cardCode').isString().notEmpty()
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const setDetails = findSet(req.params.setId);
-    const cardDetails = findCard(req.params.cardId);
+    const setDetails = findSet(req.params.setCode);
+    const cardDetails = findCard(req.params.cardCode);
 
-    if (cardDetails && setDetails && setDetails.cards[cardDetails.code] === cardDetails) {
+    if (setDetails && cardDetails && setDetails.cards.includes(cardDetails.id)) {
         res.json(cardDetails);
     } else {
         res.status(404).json({ error: 'Card not found' });

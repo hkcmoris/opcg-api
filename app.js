@@ -19,7 +19,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(helmet());
-app.use(morgan('combined'));
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+} else {
+    app.use(morgan('combined')); // Setting up Morgan middleware as a logger
+}
 app.use(cors());
 app.use(express.json());
 
@@ -30,12 +34,12 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use('/api/v1/sets', setsRoutes);
-app.use('/api/v1/cards', cardsRoutes);
+app.use('/api/v2/sets', setsRoutes);
+app.use('/api/v2/cards', cardsRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}/api/v1/`);
+    console.log(`Server is running on http://localhost:${port}/api/v2/`);
 });

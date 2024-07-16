@@ -1,43 +1,41 @@
 // utils/findSet.js
-const collectionData = require('../collection.v1.json');
+const collectionData = require('../collection.v2.json');
 
-// Optimized data structure for fast lookup
+// Optimized data structures for fast lookup
+const setsMap = Object.keys(collectionData.sets).reduce((acc, setId) => {
+    const set = collectionData.sets[setId];
+    acc[set.code.replace('-', '').toUpperCase()] = set;
+    return acc;
+}, {});
 
-const setsMap = {};
-Object.keys(collectionData.sets).forEach(setId => {
-    setsMap[collectionData.sets[setId].code.replace('-', '').toUpperCase()] = collectionData.sets[setId];
-});
+const cardsMap = Object.keys(collectionData.cards).reduce((acc, cardId) => {
+    const card = collectionData.cards[cardId];
+    acc[card.code.toUpperCase()] = card;
+    return acc;
+}, {});
 
-const cardsMap = {};
-Object.keys(collectionData.sets).forEach(setId => {
-    Object.assign(cardsMap, collectionData.sets[setId.toUpperCase()].cards);
-});
-
-const findSet = (setId) => {
-    setId = setId.toUpperCase();
-    let setDetails = collectionData.sets[setId];
-    if (!setDetails) {
-        if (setId.includes('-')) {
-            setId = setId.replace('-', '');
-        }
-        // try to find by code
-        setDetails = setsMap[setId];
-    }
-    return setDetails;
+const findSet = (setCode) => {
+    setCode = setCode.toUpperCase();
+    
+    return setsMap[setCode] || null;
 };
 
-const findCard = (cardId) => {
-    return cardsMap[cardId.toUpperCase()];
-}
+const findCard = (cardCode) => {
+    cardCode = cardCode.toUpperCase();
+    return cardsMap[cardCode] || null;
+};
 
-const findCards = (cardCode) => {
-    const cardDetails = [];
-    Object.values(cardsMap).forEach(card => {
-        if (card.code && card.code.toUpperCase().includes(cardCode)) {
-            cardDetails.push(card);
-        }
+const findCardsByFilter = (filter) => {
+    filter = filter.toLowerCase();
+    return Object.values(cardsMap).filter(card => {
+        const featureMatch = card.feature.some(f => f.toLowerCase().includes(filter));
+        return (
+            card.type.toLowerCase().includes(filter) ||
+            featureMatch ||
+            card.name.toLowerCase().includes(filter) ||
+            card.code.toLowerCase().includes(filter)
+        );
     });
-    return cardDetails;
-}
+};
 
-module.exports = { findSet, findCard, findCards, cardsMap, setsMap };
+module.exports = { findSet, findCard, findCardsByFilter, cardsMap, setsMap };
