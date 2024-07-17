@@ -1,5 +1,5 @@
 // utils/findSet.js
-import collectionData from '../collection.v2.json' assert {type: "json"};
+import collectionData from '../collection.v2.json' with {type: "json"};
 
 // Optimized data structures for fast lookup
 const setsMap = Object.keys(collectionData.sets).reduce((acc, setId) => {

@@ -79,3 +79,5 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     logger.info(`Server is running on http://localhost:${port}/api/v2/`);
 });
+
+export default app;
