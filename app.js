@@ -2,13 +2,14 @@ import dotenv from 'dotenv';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import logger from './logger.js'; // use the new logger
+import logger from './logger.js';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
-import errorHandler from './errorHandler.js'; // .js extension needed
-import setsRoutes from './routes/sets.js'; // .js extension needed
-import cardsRoutes from './routes/cards.js'; // .js extension needed
-import indexRoutes from './routes/index.js'; // .js extension needed
+import errorHandler from './errorHandler.js';
+import setsRoutes from './routes/sets.js';
+import cardsRoutes from './routes/cards.js';
+import indexRoutes from './routes/index.js';
+import setupSwagger from './swagger.js'; 
 
 dotenv.config();
 
@@ -28,7 +29,7 @@ app.use(helmet({
     crossOriginEmbedderPolicy: process.env.NODE_ENV === 'production' ? true : false,
 }));
 
-// Custom Morgan format without colors
+// default Morgan dev format without colors
 const morganDevFormat = ':method :url :status :response-time ms - :res[content-length]';
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan(morganDevFormat, { stream: logger.stream }));
@@ -63,6 +64,8 @@ if (process.env.NODE_ENV === 'production') {
         res.redirect(`https://${req.headers.host}${req.url}`);
     });
 }
+
+setupSwagger(app);
 
 app.use('/api/v2', indexRoutes);
 app.use('/api/v2/sets', setsRoutes);

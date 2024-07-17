@@ -7,6 +7,7 @@ $files = @(
 	@{Path="app.js"; Language="javascript"},
 	@{Path="logger.js"; Language="javascript"},
 	@{Path="errorHandler.js"; Language="javascript"},
+	@{Path="swagger.js"; Language="javascript"},
 	@{Path=(Join-Path "routes" "index.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "sets.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "cards.js"); Language="javascript"},
