@@ -7,6 +7,7 @@ import cors from 'cors';
 import errorHandler from './errorHandler.js'; // .js extension needed
 import setsRoutes from './routes/sets.js'; // .js extension needed
 import cardsRoutes from './routes/cards.js'; // .js extension needed
+import indexRoutes from './routes/index.js'; // .js extension needed
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+app.use('/api/v2', indexRoutes);
 app.use('/api/v2/sets', setsRoutes);
 app.use('/api/v2/cards', cardsRoutes);
 
