@@ -57,3 +57,4 @@ $combinedInfo = "collection.v2.json:`n``````json`n" + $jsonContent + "`n``````"
 Add-Content -Path "combined.txt" -Value $combinedInfo
 
 # Existing script to combine other files continues here...
+Add-Content -Path "combined.txt" -Value "`nThis is my this One Piece Card Game API. Help me turn it into a production-grade api. It will be hosted on heroku after we finish development. Testing on localhost for now. Let's go through the process one step at a time. After we both confirm completion of a step, only then we move on."
