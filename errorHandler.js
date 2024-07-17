@@ -1,10 +1,16 @@
 // errorHandler.js
+import logger from './logger.js';
+
 const errorHandler = (err, req, res, next) => {
-    if (err.name === 'ValidationError') {
-        return res.status(400).json({ errors: err.errors });
-    }
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
+    const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+    res.status(statusCode);
+    logger.error(err.message, { method: req.method, url: req.originalUrl, stack: err.stack });
+    res.json({
+        status: 'error',
+        statusCode: statusCode,
+        message: err.message,
+        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+    });
 };
 
 export default errorHandler;
