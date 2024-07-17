@@ -1,5 +1,5 @@
 // utils/findSet.js
-const collectionData = require('../collection.v2.json');
+import collectionData from '../collection.v2.json' assert {type: "json"};
 
 // Optimized data structures for fast lookup
 const setsMap = Object.keys(collectionData.sets).reduce((acc, setId) => {
@@ -38,4 +38,4 @@ const findCardsByFilter = (filter) => {
     });
 };
 
-module.exports = { findSet, findCard, findCardsByFilter, cardsMap, setsMap };
+export { findSet, findCard, findCardsByFilter, cardsMap, setsMap };

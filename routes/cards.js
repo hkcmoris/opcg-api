@@ -1,8 +1,9 @@
 // routes/cards.js
-const express = require('express');
+import express from 'express';
+import { param, validationResult } from 'express-validator';
+import { findCard, findCardsByFilter, cardsMap } from '../utils/find.js';
+
 const router = express.Router();
-const { param, validationResult } = require('express-validator');
-const { findCard, findCardsByFilter, cardsMap } = require('../utils/find');
 
 router.get('/', (req, res) => { 
     res.json(cardsMap); 
@@ -33,4 +34,4 @@ router.get('/filter/:filter', [param('filter').isString().notEmpty()], (req, res
     res.json({ cards: filteredCards });
 });
 
-module.exports = router;
+export default router;

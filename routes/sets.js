@@ -1,8 +1,9 @@
 // routes/sets.js
-const express = require('express');
+import express from 'express';
+import { param, validationResult } from 'express-validator';
+import { findSet, findCard, setsMap, cardsMap } from '../utils/find.js';
+
 const router = express.Router();
-const { param, validationResult } = require('express-validator');
-const { findSet, findCard, setsMap, cardsMap } = require('../utils/find');
 
 router.get('/', (req, res) => { 
     res.json(setsMap); 
@@ -57,4 +58,4 @@ router.get('/:setCode/:cardCode', [
     }
 });
 
-module.exports = router;
+export default router;
