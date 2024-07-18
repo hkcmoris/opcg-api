@@ -5,7 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest",
+    "test": "cross-env NODE_ENV=test nyc jest",
     "start": "cross-env NODE_ENV=development NEW_RELIC_APP_NAME=OPCG-API NEW_RELIC_LICENSE_KEY=eu01xx356b47119592c0787e588076eeFFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs app.js",
     "start:prod": "cross-env NODE_ENV=production NEW_RELIC_APP_NAME=OPCG-API NEW_RELIC_LICENSE_KEY=eu01xx356b47119592c0787e588076eeFFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs app.js",
     "lint": "eslint .",
@@ -44,7 +44,26 @@
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.8.0",
     "jest": "^29.7.0",
+    "nyc": "^17.0.0",
     "prettier": "^3.3.3",
     "supertest": "^7.0.0"
+  },
+  "nyc": {
+    "reporter": [
+      "text",
+      "lcov"
+    ],
+    "exclude": [
+      "tests/",
+      "node_modules/"
+    ],
+    "all": true,
+    "include": [
+      "routes/**/*.js",
+      "utils/**/*.js",
+      "app.js",
+      "errorHandler.js",
+      "logger.js"
+    ]
   }
 }
