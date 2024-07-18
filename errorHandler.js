@@ -7,7 +7,12 @@ const errorHandler = (err, req, res) => {
   logger.error(err.message, {
     method: req.method,
     url: req.originalUrl,
+    status: statusCode,
     stack: err.stack,
+    body: req.body,
+    params: req.params,
+    query: req.query,
+    user: req.user || 'Unauthenticated',
   });
   res.json({
     status: 'error',
