@@ -37,7 +37,7 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    logFormat
+    logFormat,
   ),
   transports,
   exceptionHandlers: [
