@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
-    "start": "cross-env NODE_ENV=development node app.js",
-    "start:prod": "cross-env NODE_ENV=production node -r newrelic app.js",
+    "start": "cross-env NODE_ENV=development NEW_RELIC_APP_NAME=OPCG-API NEW_RELIC_LICENSE_KEY=eu01xx356b47119592c0787e588076eeFFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs app.js",
+    "start:prod": "cross-env NODE_ENV=production NEW_RELIC_APP_NAME=OPCG-API NEW_RELIC_LICENSE_KEY=eu01xx356b47119592c0787e588076eeFFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs app.js",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

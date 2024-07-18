@@ -1,6 +1,4 @@
-// if (process.env.NODE_ENV === 'production') {
-//     import newrelic from 'newrelic';
-// }
+import newrelic from 'newrelic';
 import dotenv from 'dotenv';
 import express from 'express';
 import helmet from 'helmet';
@@ -113,7 +111,7 @@ const options = {
 
 if (process.env.NODE_ENV !== 'test') {
   https.createServer(options, app).listen(port, () => {
-    logger.info(`Server is running on http://localhost:${port}/api/v2/`);
+    logger.info(`Server is running on https://localhost:${port}/api/v2/`);
   });
 }
 
