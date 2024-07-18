@@ -28,7 +28,13 @@ const findCard = (cardCode) => {
 const findCardsByFilter = (filter) => {
     filter = filter.toLowerCase();
     return Object.values(cardsMap).filter(card => {
-        const featureMatch = card.feature.some(f => f.toLowerCase().includes(filter));
+        let featureMatch = false;
+        // feature is either a string or an array of strings
+        if (Array.isArray(card.feature)) {
+            featureMatch = card.feature.some(f => f.toLowerCase().includes(filter));
+        } else if (typeof card.feature === 'string') {
+            featureMatch = card.feature.toLowerCase().includes(filter);
+        }
         return (
             card.type.toLowerCase().includes(filter) ||
             featureMatch ||

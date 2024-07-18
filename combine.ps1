@@ -1,6 +1,7 @@
 # Define an array of objects holding file information
 $files = @(
 	@{Path="package.json"; Language="json"},
+	@{Path=".node-version"; Language="plaintext"},
 	@{Path=".env"; Language="plaintext"},
 	@{Path="Procfile"; Language="plaintext"},
 	@{Path="app.json"; Language="json"},
@@ -8,12 +9,16 @@ $files = @(
 	@{Path="logger.js"; Language="javascript"},
 	@{Path="errorHandler.js"; Language="javascript"},
 	@{Path="swagger.js"; Language="javascript"},
+	@{Path="jest.setup.js"; Language="javascript"},
 	@{Path="jest.config.js"; Language="javascript"},
 	@{Path=".\.babelrc"; Language="json"},
 	@{Path=(Join-Path "routes" "index.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "sets.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "cards.js"); Language="javascript"},
-	@{Path=(Join-Path "utils" "find.js"); Language="javascript"}
+	@{Path=(Join-Path "utils" "find.js"); Language="javascript"},
+	@{Path=(Join-Path (Join-Path "tests" "integration") "sets.test.js"); Language="javascript"},
+	@{Path=(Join-Path (Join-Path "tests" "integration") "cards.test.js"); Language="javascript"},
+	@{Path=(Join-Path (Join-Path "tests" "utils") "find.test.js"); Language="javascript"}
 )
 
 # Clear the content of combined.txt before appending new data

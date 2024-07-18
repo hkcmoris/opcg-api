@@ -17,7 +17,7 @@ describe('findSet', () => {
 
 describe('findCard', () => {
   test('should find and return the card details for a valid card code', () => {
-    const cardCode = 'OP02-039_p1'.replace('-', '').toUpperCase();
+    const cardCode = 'OP02-039'.toUpperCase();
     const result = findCard(cardCode);
     expect(result).toEqual(cardsMap[cardCode]);
   });
