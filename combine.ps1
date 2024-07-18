@@ -17,6 +17,7 @@ $files = @(
 	@{Path=".babelrc"; Language="json"},
 	@{Path="eslint.config.js"; Language="javascript"},
 	@{Path=".prettierrc"; Language="json"},
+	@{Path="newrelic.cjs"; Language="javascript"},
 	@{Path=(Join-Path "routes" "index.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "sets.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "cards.js"); Language="javascript"},

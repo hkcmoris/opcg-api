@@ -1,3 +1,6 @@
+// if (process.env.NODE_ENV === 'production') {
+//     import newrelic from 'newrelic';
+// }
 import dotenv from 'dotenv';
 import express from 'express';
 import helmet from 'helmet';
@@ -5,6 +8,8 @@ import morgan from 'morgan';
 import logger from './logger.js';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import fs from 'fs';
+import https from 'https';
 import errorHandler from './errorHandler.js';
 import setsRoutes from './routes/sets.js';
 import cardsRoutes from './routes/cards.js';
@@ -38,6 +43,18 @@ app.use(
       process.env.NODE_ENV === 'production' ? undefined : false,
     crossOriginEmbedderPolicy:
       process.env.NODE_ENV === 'production' ? true : false,
+    frameguard: {
+      action: 'deny',
+    },
+    hsts: {
+      maxAge: 31536000, // 1 year
+      includeSubDomains: true,
+      preload: true,
+    },
+    hidePoweredBy: true,
+    ieNoOpen: true,
+    noSniff: true,
+    xssFilter: true,
   }),
 );
 
@@ -89,8 +106,13 @@ app.use((err, req, res, next) => {
   errorHandler(err, req, res, next);
 });
 
+const options = {
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./cert.pem'),
+};
+
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(port, () => {
+  https.createServer(options, app).listen(port, () => {
     logger.info(`Server is running on http://localhost:${port}/api/v2/`);
   });
 }

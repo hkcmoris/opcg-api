@@ -133,3 +133,5 @@ dist
 .pnp.*
 
 combined.txt
+newrelic.cjs
+newrelic.js
