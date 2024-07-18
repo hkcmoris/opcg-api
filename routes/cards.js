@@ -21,8 +21,8 @@ const router = express.Router();
  *               items:
  *                 type: object
  */
-router.get('/', (req, res) => { 
-    res.json(cardsMap); 
+router.get('/', (req, res) => {
+  res.json(cardsMap);
 });
 
 /**
@@ -48,20 +48,31 @@ router.get('/', (req, res) => {
  *       404:
  *         description: Card not found
  */
-router.get('/:cardCode', [param('cardCode').isString().notEmpty().withMessage('cardCode must be a non-empty string').trim().escape()], (req, res) => {
+router.get(
+  '/:cardCode',
+  [
+    param('cardCode')
+      .isString()
+      .notEmpty()
+      .withMessage('cardCode must be a non-empty string')
+      .trim()
+      .escape(),
+  ],
+  (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const cardDetails = findCard(req.params.cardCode);
 
     if (cardDetails) {
-        res.json(cardDetails);
+      res.json(cardDetails);
     } else {
-        res.status(404).json({ error: `Card ${req.params.cardCode} not found` });
+      res.status(404).json({ error: `Card ${req.params.cardCode} not found` });
     }
-});
+  },
+);
 
 /**
  * @swagger
@@ -86,14 +97,25 @@ router.get('/:cardCode', [param('cardCode').isString().notEmpty().withMessage('c
  *               items:
  *                 type: object
  */
-router.get('/filter/:filter', [param('filter').isString().notEmpty().withMessage('filter must be a non-empty string').trim().escape()], (req, res) => {
+router.get(
+  '/filter/:filter',
+  [
+    param('filter')
+      .isString()
+      .notEmpty()
+      .withMessage('filter must be a non-empty string')
+      .trim()
+      .escape(),
+  ],
+  (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const filteredCards = findCardsByFilter(req.params.filter);
     res.json({ cards: filteredCards });
-});
+  },
+);
 
 export default router;

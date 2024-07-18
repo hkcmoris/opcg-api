@@ -12,6 +12,8 @@ $files = @(
 	@{Path="jest.setup.js"; Language="javascript"},
 	@{Path="jest.config.js"; Language="javascript"},
 	@{Path=".\.babelrc"; Language="json"},
+	@{Path="eslint.config.js"; Language="javascript"},
+	@{Path=".\.prettierrc"; Language="json"},
 	@{Path=(Join-Path "routes" "index.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "sets.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "cards.js"); Language="javascript"},

@@ -1,20 +1,20 @@
 {
-    "name": "opcg-api",
-    "description": "One Piece Card Game API",
-    "repository": "https://github.com/hkcmoris/opcg-api",
-    "scripts": {
-      "postdeploy": "npm run migrate"
+  "name": "opcg-api",
+  "description": "One Piece Card Game API",
+  "repository": "https://github.com/hkcmoris/opcg-api",
+  "scripts": {
+    "postdeploy": "npm run migrate"
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": {
+      "required": true
     },
-    "env": {
-      "NODE_ENV": "production",
-      "PORT": {
-        "required": true
-      },
-      "RATE_LIMIT": {
-        "required": true
-      },
-      "TIMEOUT": {
-        "required": true
-      }
+    "RATE_LIMIT": {
+      "required": true
+    },
+    "TIMEOUT": {
+      "required": true
     }
   }
+}

@@ -1,5 +1,10 @@
-import { findSet, findCard, findCardsByFilter, cardsMap, setsMap } from '../../utils/find.js';
-import collectionData from '../../collection.v2.json' with {type: "json"};
+import {
+  findSet,
+  findCard,
+  findCardsByFilter,
+  cardsMap,
+} from '../../utils/find.js';
+import collectionData from '../../collection.v2.json' with { type: 'json' };
 
 describe('findSet', () => {
   test('should find and return the set details for a valid set code', () => {
@@ -33,9 +38,11 @@ describe('findCardsByFilter', () => {
   test('should return filtered cards that match the filter criteria', () => {
     const filter = 'FILM';
     const filteredCards = findCardsByFilter(filter);
-    expect(filteredCards).toEqual(expect.arrayContaining([
-      expect.objectContaining({ feature: expect.arrayContaining([filter]) })
-    ]));
+    expect(filteredCards).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ feature: expect.arrayContaining([filter]) }),
+      ]),
+    );
   });
 
   test('should return an empty array for an unmatched filter criteria', () => {

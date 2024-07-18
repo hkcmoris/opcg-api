@@ -23,13 +23,13 @@ const router = express.Router();
  *                 hint:
  *                   type: string
  */
-router.get('/', (req, res) => { 
-    const response = {
-        message: 'Hello from the API',
-        version: '2.0.0',
-        hint: 'You can view the swagger documentation at /api-docs'
-    };
-    res.json(response);
+router.get('/', (req, res) => {
+  const response = {
+    message: 'Hello from the API',
+    version: '2.0.0',
+    hint: 'You can view the swagger documentation at /api-docs',
+  };
+  res.json(response);
 });
 
 export default router;

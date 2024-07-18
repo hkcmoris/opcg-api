@@ -6,19 +6,21 @@ let server;
 let port;
 
 beforeAll(async () => {
-    const getAvailablePort = () => {
-        return new Promise((resolve, reject) => {
-            const tempServer = http.createServer();
-            tempServer.listen(0, () => {
-                const port = tempServer.address().port;
-                tempServer.close(() => resolve(port));
-            });
-            tempServer.on('error', reject);
-        });
-    };
-    port = await getAvailablePort();
-    process.env.PORT = port;  // Set the port for the current process
-    server = app.listen(port, () => console.log(`Server running on port ${port}`));
+  const getAvailablePort = () => {
+    return new Promise((resolve, reject) => {
+      const tempServer = http.createServer();
+      tempServer.listen(0, () => {
+        const port = tempServer.address().port;
+        tempServer.close(() => resolve(port));
+      });
+      tempServer.on('error', reject);
+    });
+  };
+  port = await getAvailablePort();
+  process.env.PORT = port; // Set the port for the current process
+  server = app.listen(port, () =>
+    console.log(`Server running on port ${port}`),
+  );
 });
 
 afterAll(() => {
