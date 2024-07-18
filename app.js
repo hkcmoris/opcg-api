@@ -11,7 +11,15 @@ import cardsRoutes from './routes/cards.js';
 import indexRoutes from './routes/index.js';
 import setupSwagger from './swagger.js';
 
-dotenv.config();
+const environmentFiles = {
+  development: './config/.env.development',
+  production: './config/.env.production',
+  test: './config/.env.test',
+};
+
+dotenv.config({
+  path: environmentFiles[process.env.NODE_ENV] || './config/.env',
+});
 
 const requiredEnvVars = ['PORT', 'RATE_LIMIT', 'TIMEOUT'];
 requiredEnvVars.forEach((key) => {

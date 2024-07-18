@@ -7,23 +7,46 @@ const logFormat = winston.format.printf(
   },
 );
 
+const transports = [
+  new winston.transports.Console({
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.simple(),
+    ),
+  }),
+  new winston.transports.DailyRotateFile({
+    filename: 'logs/application-%DATE%.log',
+    datePattern: 'YYYY-MM-DD',
+    maxFiles: '14d',
+  }),
+];
+
+// Production-specific transports (if needed)
+if (process.env.NODE_ENV === 'production') {
+  // Add transports for external logging services here
+  // Example:
+  // transports.push(new winston.transports.Http({
+  //   host: 'logs.example.com',
+  //   path: '/logs',
+  //   auth: { username: 'user', password: 'pass' },
+  // }));
+}
+
 const logger = winston.createLogger({
-  level: 'info',
+  level: process.env.LOG_LEVEL || 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    logFormat,
+    logFormat
   ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.DailyRotateFile({
-      filename: 'logs/application-%DATE%.log',
-      datePattern: 'YYYY-MM-DD',
-      maxFiles: '14d',
-    }),
-  ],
+  transports,
   exceptionHandlers: [
-    new winston.transports.Console(),
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple(),
+      ),
+    }),
     new winston.transports.DailyRotateFile({
       filename: 'logs/exceptions-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
