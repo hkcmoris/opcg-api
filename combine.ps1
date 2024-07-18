@@ -22,13 +22,43 @@ $files = @(
 	@{Path=(Join-Path "routes" "sets.js"); Language="javascript"},
 	@{Path=(Join-Path "routes" "cards.js"); Language="javascript"},
 	@{Path=(Join-Path "utils" "find.js"); Language="javascript"},
+	@{Path=(Join-Path "utils" "validateEnv.js"); Language="javascript"},
 	@{Path=(Join-Path (Join-Path "tests" "integration") "sets.test.js"); Language="javascript"},
 	@{Path=(Join-Path (Join-Path "tests" "integration") "cards.test.js"); Language="javascript"},
 	@{Path=(Join-Path (Join-Path "tests" "utils") "find.test.js"); Language="javascript"}
 )
 
 # Clear the content of combined.txt before appending new data
-Set-Content -Path "combined.txt" -Value ""
+Set-Content -Path "combined.txt" -Value "Project Structure`n``````plaintext"
+
+$excludeDirs = @("node_modules", "coverage", "logs")
+$excludeFiles = @("combined.txt", "combine.ps1", "printFolderStructure.ps1")
+$rootPath = Get-Location
+
+function Get-DirectoryTree {
+    param (
+        [string]$path,
+        [int]$depth = 0
+    )
+    $output = @()
+    $depth++
+    $dirs = Get-ChildItem -Path $path -Directory | Where-Object { $excludeDirs -notcontains $_.Name }
+    foreach ($dir in $dirs) {
+        $relativePath = $dir.FullName.Substring((Get-Location).Path.Length).TrimStart('\')
+        $output += $relativePath
+        $output += Get-DirectoryTree -path $dir.FullName -depth $depth
+    }
+    $files = Get-ChildItem -Path $path -File | Where-Object { $excludeFiles -notcontains $_.Name }
+    foreach ($file in $files) {
+        $relativePath = $file.FullName.Substring((Get-Location).Path.Length).TrimStart('\')
+        $output += $relativePath
+    }
+    return $output
+}
+
+$tree = Get-DirectoryTree -path $rootPath -depth 0
+Add-Content -Path "combined.txt" -Value $tree
+Add-Content -Path "combined.txt" -Value "```````n"
 
 # Loop through each file and append its content to combined.txt
 foreach ($file in $files) {

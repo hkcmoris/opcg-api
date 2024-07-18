@@ -1,5 +1,6 @@
 import newrelic from 'newrelic';
-import dotenv from 'dotenv';
+import validateEnv from './utils/validateEnv.js';
+validateEnv(); // Validate environment variables
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -14,41 +15,35 @@ import cardsRoutes from './routes/cards.js';
 import indexRoutes from './routes/index.js';
 import setupSwagger from './swagger.js';
 
-const environmentFiles = {
-  development: './config/.env.development',
-  production: './config/.env.production',
-  test: './config/.env.test',
-};
-
-dotenv.config({
-  path: environmentFiles[process.env.NODE_ENV] || './config/.env',
-});
-
-const requiredEnvVars = ['PORT', 'RATE_LIMIT', 'TIMEOUT'];
-requiredEnvVars.forEach((key) => {
-  if (!process.env[key]) {
-    console.error(`Error: Missing environment variable ${key}`);
-    process.exit(1);
-  }
-});
-
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(
   helmet({
     contentSecurityPolicy:
-      process.env.NODE_ENV === 'production' ? undefined : false,
-    crossOriginEmbedderPolicy:
-      process.env.NODE_ENV === 'production' ? true : false,
+      process.env.NODE_ENV === 'production'
+        ? {
+            useDefaults: true,
+            directives: {
+              'default-src': ["'self'"],
+              'img-src': ["'self'", 'data:', 'https:'],
+              'script-src': ["'self'", "'unsafe-inline'"],
+              'style-src': ["'self'", 'https:', "'unsafe-inline'"],
+            },
+          }
+        : false,
+    crossOriginEmbedderPolicy: process.env.NODE_ENV === 'production',
     frameguard: {
       action: 'deny',
     },
-    hsts: {
-      maxAge: 31536000, // 1 year
-      includeSubDomains: true,
-      preload: true,
-    },
+    hsts:
+      process.env.NODE_ENV === 'production'
+        ? {
+            maxAge: 31536000, // 1 year
+            includeSubDomains: true,
+            preload: true,
+          }
+        : false,
     hidePoweredBy: true,
     ieNoOpen: true,
     noSniff: true,
@@ -66,7 +61,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 const corsOptions = {
   origin: function (origin, callback) {
-    const allowedOrigins = ['http://localhost:3000', 'https://devground.cz'];
+    const allowedOrigins = ['https://localhost:3000', 'https://devground.cz'];
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
