@@ -8,6 +8,7 @@
     "test": "cross-env NODE_ENV=test nyc jest",
     "start": "cross-env NODE_ENV=development NEW_RELIC_APP_NAME=OPCG-API NEW_RELIC_LICENSE_KEY=eu01xx356b47119592c0787e588076eeFFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs app.js",
     "start:prod": "cross-env NODE_ENV=production NEW_RELIC_APP_NAME=OPCG-API NEW_RELIC_LICENSE_KEY=eu01xx356b47119592c0787e588076eeFFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs app.js",
+    "start:prod:safe": "cross-env NODE_ENV=production node ./utils/validateEnv.js --experimental-loader=newrelic/esm-loader.mjs app.js",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

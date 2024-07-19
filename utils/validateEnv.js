@@ -29,4 +29,6 @@ const validateEnv = () => {
   }
 };
 
-export default validateEnv;
+validateEnv();
+
+//export default validateEnv;

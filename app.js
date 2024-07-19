@@ -1,6 +1,6 @@
+//import /*validateEnv from*/ './utils/validateEnv.js';
+//validateEnv(); // Validate environment variables
 import newrelic from 'newrelic';
-import validateEnv from './utils/validateEnv.js';
-validateEnv(); // Validate environment variables
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
