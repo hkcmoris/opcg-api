@@ -1,5 +1,5 @@
 // utils/findSet.js
-import collectionData from '../collection.v2.json' with { type: 'json' };
+import collectionData from '../collection.v3.json' with { type: 'json' };
 
 // Optimized data structures for fast lookup
 const setsMap = Object.keys(collectionData.sets).reduce((acc, setId) => {
@@ -10,7 +10,7 @@ const setsMap = Object.keys(collectionData.sets).reduce((acc, setId) => {
 
 const cardsMap = Object.keys(collectionData.cards).reduce((acc, cardId) => {
   const card = collectionData.cards[cardId];
-  acc[card.code.toUpperCase()] = card;
+  acc[card.id.toUpperCase()] = card;
   return acc;
 }, {});
 
@@ -20,27 +20,61 @@ const findSet = (setCode) => {
   return setsMap[setCode] || null;
 };
 
-const findCard = (cardCode) => {
-  cardCode = cardCode.toUpperCase();
-  return cardsMap[cardCode] || null;
+const findCard = (cardId) => {
+  cardId = cardId.toUpperCase();
+  return cardsMap[cardId] || null;
 };
 
-const findCardsByFilter = (filter) => {
-  filter = filter.toLowerCase();
+const checkArrayOrStringMatch = (input, filter) => {
+  console.log('input', input);
+  console.log('filter', filter);
+  if (Array.isArray(input)) {
+    return input.some((item) => item.toLowerCase().includes(filter));
+  } else if (typeof input === 'string') {
+    return input.toLowerCase().includes(filter);
+  }
+  return false;
+};
+
+const findCardsByFilter = (filterString) => {
+  // Split the filter string into individual criteria based on a delimiter, e.g., ";"
+  const filters = filterString
+    .split(';')
+    .map((filter) => filter.trim().toLowerCase());
+
   return Object.values(cardsMap).filter((card) => {
-    let featureMatch = false;
-    // feature is either a string or an array of strings
-    if (Array.isArray(card.feature)) {
-      featureMatch = card.feature.some((f) => f.toLowerCase().includes(filter));
-    } else if (typeof card.feature === 'string') {
-      featureMatch = card.feature.toLowerCase().includes(filter);
-    }
-    return (
-      card.type.toLowerCase().includes(filter) ||
-      featureMatch ||
-      card.name.toLowerCase().includes(filter) ||
-      card.code.toLowerCase().includes(filter)
-    );
+    // Check each filter criterion
+    return filters.every((filter) => {
+      // Example criteria: "color:black", "type:rush", "counter:2000"
+      const [key, value] = filter
+        .split(':')
+        .map((part) => part.trim().toLowerCase());
+
+      const featureMatch = checkArrayOrStringMatch(card.feature, value);
+      const keywordsMatch = checkArrayOrStringMatch(card.keywords, value);
+
+      switch (key) {
+        case 'id':
+          return card.id.toString() === value;
+        case 'name':
+          return card.name.toLowerCase().includes(value);
+        case 'code':
+          return card.code.toLowerCase().includes(value);
+        case 'color':
+          return card.color && card.color.toLowerCase() === value;
+        case 'type':
+          return card.type && card.type.toLowerCase().includes(value);
+        case 'counter':
+          return card.counter && card.counter.toString() === value;
+        case 'feature':
+          return featureMatch;
+        case 'keyword':
+          return keywordsMatch;
+        default:
+          // Implement additional cases as needed
+          return false;
+      }
+    });
   });
 };
 

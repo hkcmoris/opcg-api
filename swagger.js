@@ -5,7 +5,7 @@ const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
     title: 'One Piece Card Game API',
-    version: '2.0.0',
+    version: '3.0.0',
     description: 'API documentation for One Piece Card Game',
     contact: {
       name: 'OPCG API Support',
@@ -14,7 +14,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3000/api/v2',
+      url: 'http://localhost:3000/api/v3',
       description: 'Local server',
     },
   ],
@@ -28,7 +28,7 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 const setupSwagger = (app) => {
-  app.use('/api/v2/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/api/v3/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
 
 export default setupSwagger;

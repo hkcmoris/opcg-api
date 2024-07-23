@@ -1,6 +1,6 @@
-//import /*validateEnv from*/ './utils/validateEnv.js';
-//validateEnv(); // Validate environment variables
-import newrelic from 'newrelic';
+import validateEnv from './utils/validateEnv.js';
+validateEnv(); // Validate environment variables
+import('newrelic');
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -90,9 +90,11 @@ if (process.env.NODE_ENV === 'production') {
 
 setupSwagger(app);
 
-app.use('/api/v2', indexRoutes);
-app.use('/api/v2/sets', setsRoutes);
-app.use('/api/v2/cards', cardsRoutes);
+let v = 'v3';
+
+app.use(`/api/${v}`, indexRoutes);
+app.use(`/api/${v}/sets`, setsRoutes);
+app.use(`/api/${v}/cards`, cardsRoutes);
 
 app.use((err, req, res, next) => {
   logger.error(err.stack);
@@ -107,6 +109,7 @@ const options = {
 if (process.env.NODE_ENV !== 'test') {
   https.createServer(options, app).listen(port, () => {
     logger.info(`Server is running on https://localhost:${port}/api/v2/`);
+    logger.info('NEW_RELIC_APP_NAME: ' + process.env.NEW_RELIC_APP_NAME);
   });
 }
 

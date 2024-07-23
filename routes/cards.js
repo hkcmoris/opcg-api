@@ -1,7 +1,7 @@
 // routes/cards.js
 import express from 'express';
 import { param, validationResult } from 'express-validator';
-import { findCard, findCardsByFilter, cardsMap } from '../utils/find.js';
+import { findCard, findCardsByFilter, cardsMap } from './../utils/find.js';
 
 const router = express.Router();
 
@@ -27,13 +27,13 @@ router.get('/', (req, res) => {
 
 /**
  * @swagger
- * /cards/{cardCode}:
+ * /cards/{cardId}:
  *   get:
- *     summary: Get card by code
+ *     summary: Get card by id
  *     tags: [Cards]
  *     parameters:
  *       - in: path
- *         name: cardCode
+ *         name: cardId
  *         schema:
  *           type: string
  *         required: true
@@ -49,12 +49,12 @@ router.get('/', (req, res) => {
  *         description: Card not found
  */
 router.get(
-  '/:cardCode',
+  '/:cardId',
   [
-    param('cardCode')
+    param('cardId')
       .isString()
       .notEmpty()
-      .withMessage('cardCode must be a non-empty string')
+      .withMessage('cardId must be a non-empty string')
       .trim()
       .escape(),
   ],
@@ -64,12 +64,12 @@ router.get(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const cardDetails = findCard(req.params.cardCode);
+    const cardDetails = findCard(req.params.cardId);
 
     if (cardDetails) {
       res.json(cardDetails);
     } else {
-      res.status(404).json({ error: `Card ${req.params.cardCode} not found` });
+      res.status(404).json({ error: `Card ${req.params.cardId} not found` });
     }
   },
 );

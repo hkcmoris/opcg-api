@@ -3,7 +3,7 @@ import {
   findCard,
   findCardsByFilter,
   cardsMap,
-} from '../../utils/find.js';
+} from './../../utils/find.js';
 import collectionData from '../../collection.v2.json' with { type: 'json' };
 
 describe('findSet', () => {

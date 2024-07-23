@@ -1,7 +1,12 @@
 // routes/sets.js
 import express from 'express';
 import { param, validationResult } from 'express-validator';
-import { findSet, findCard, setsMap, cardsMap } from '../utils/find.js';
+import {
+  findSet,
+  findCardsByFilter,
+  setsMap,
+  cardsMap,
+} from './../utils/find.js';
 
 const router = express.Router();
 
@@ -127,35 +132,29 @@ router.get(
 
 /**
  * @swagger
- * /sets/{setCode}/{cardCode}:
+ * /sets/{setCode}/cards/filter/{filter}:
  *   get:
- *     summary: Get card by set code and card code
- *     tags: [Sets]
+ *     summary: Get cards by filter from set
+ *     tags: [Cards]
  *     parameters:
  *       - in: path
- *         name: setCode
+ *         name: filter
  *         schema:
  *           type: string
  *         required: true
- *         description: The set code
- *       - in: path
- *         name: cardCode
- *         schema:
- *           type: string
- *         required: true
- *         description: The card code
+ *         description: The filter
  *     responses:
  *       200:
- *         description: The card details
+ *         description: The list of cards
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *       404:
- *         description: Card/Set not found
+ *               type: array
+ *               items:
+ *                 type: object
  */
 router.get(
-  '/:setCode/:cardCode',
+  '/:setCode/cards/filter/:filter',
   [
     param('setCode')
       .isString()
@@ -163,10 +162,10 @@ router.get(
       .withMessage('setCode must be a non-empty string')
       .trim()
       .escape(),
-    param('cardCode')
+    param('filter')
       .isString()
       .notEmpty()
-      .withMessage('cardCode must be a non-empty string')
+      .withMessage('filter must be a non-empty string')
       .trim()
       .escape(),
   ],
@@ -175,21 +174,10 @@ router.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
-    const setDetails = findSet(req.params.setCode);
-    const cardDetails = findCard(req.params.cardCode);
-
-    if (!setDetails) {
-      res.status(404).json({ error: `Set ${req.params.setCode} not found` });
-    } else if (!cardDetails) {
-      res.status(404).json({ error: `Card ${req.params.cardCode} not found` });
-    } else if (!setDetails.cards.includes(cardDetails.id)) {
-      res.status(404).json({
-        error: `Card ${req.params.cardCode} not found in set ${req.params.setCode}`,
-      });
-    } else {
-      res.json(cardDetails);
-    }
+    const filteredCards = findCardsByFilter(
+      `code:${req.params.setCode};` + req.params.filter,
+    );
+    res.json({ cards: filteredCards });
   },
 );
 
